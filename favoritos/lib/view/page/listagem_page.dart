@@ -7,11 +7,33 @@ class ListagemPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<InfoVideoProvider>();
+
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Favoritos YT'),
+        title:
+            provider.mostrandoBusca
+                ? TextField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    hintText: 'Buscar...',
+                    border: InputBorder.none,
+                  ),
+                  onChanged: provider.buscar,
+                )
+                : Text('Favoritos YT'),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+          IconButton(
+            icon: Icon(provider.mostrandoBusca ? Icons.close : Icons.search),
+            onPressed: () {
+              if (provider.mostrandoBusca) {
+                provider.cancelarBusca();
+              } else {
+                provider.iniciarBusca();
+              }
+            },
+          ),
           IconButton(
             onPressed: () {
               Navigator.pushNamed(context, '/config');
@@ -30,29 +52,36 @@ class ListagemPage extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: Consumer<InfoVideoProvider>(
           builder: (context, provider, child) {
-            return GridView.builder(
-              itemCount: provider.videos.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
-              ),
+            final lista = provider.videos;
+            return ListView.builder(
+              itemCount: lista.length,
               itemBuilder: (context, index) {
-                final videos = provider.videos[index];
-                return GridTile(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: BorderDirectional(bottom: BorderSide(width: 2)),
-                    ),
+                final video = lista[index];
+                return Card(
+                  elevation: 2,
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.network(videos.imagem),
+                        Image.network(
+                          video.imagem,
+                          width: double.infinity,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
+                        const SizedBox(height: 8),
                         Text(
-                          videos.titulo,
-                          style: TextStyle(fontSize: 24, color: Colors.black),
+                          video.titulo,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         Text(
-                          videos.categoria,
-                          style: TextStyle(fontSize: 24, color: Colors.black),
+                          video.categoria,
+                          style: TextStyle(fontSize: 16, color: Colors.white),
                         ),
                       ],
                     ),

@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:listagem_favoritos_youtube/model/video_model.dart';
 
 Future<Video?> buscarVideo(String id, String categoria) async {
-  final urlListar = 'https://cruiserdev.lince.com.br/video/$id';
+  final urlListar = 'http://192.168.1.10:8888/video/$id';
   Uri uri = Uri.parse(urlListar);
   try {
     final response = await http.get(uri);
