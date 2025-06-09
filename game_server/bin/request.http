@@ -1,0 +1,7 @@
+### Consultar moedas suportadas
+GET https://cruiserdev.lince.com.br/video/K_03kFqWfqs
+Accept: application/json
+
+### Consultar moedas suportadas
+GET http://localhost:8888/video/K_03kFqWfqs
+Accept: application/json
