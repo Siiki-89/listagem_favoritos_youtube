@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:listagem_favoritos_youtube/model/video_model.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 
 Future<Video?> buscarVideo(String id, String categoria) async {
-  final urlListar = 'http://192.168.1.10:8888/video/$id';
+   final ipv4 = await NetworkInfo().getWifiIP();
+  final urlListar = 'http://$ipv4:8888/video/$id';
   Uri uri = Uri.parse(urlListar);
   try {
     final response = await http.get(uri);

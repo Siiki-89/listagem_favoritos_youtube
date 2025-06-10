@@ -18,7 +18,7 @@ class InfoVideoProvider with ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
-      print('Erro ao salvar video');
+      print('Erro ao salvar video $e');
     }
   }
 
