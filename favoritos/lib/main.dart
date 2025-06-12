@@ -6,12 +6,15 @@ import 'package:listagem_favoritos_youtube/view/page/config_page.dart';
 import 'package:listagem_favoritos_youtube/view/page/listagem_page.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final corProvider = CorProvider();
+  await corProvider.carregarCores();
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => InfoVideoProvider()),
-        ChangeNotifierProvider(create: (_) => CorProvider()),
+        ChangeNotifierProvider<CorProvider>.value(value: corProvider),
       ],
       child: MyApp(),
     ),

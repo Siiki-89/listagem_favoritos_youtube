@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:listagem_favoritos_youtube/provider/cor_provider.dart';
 import 'package:listagem_favoritos_youtube/provider/info_video_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -7,30 +8,39 @@ class ListagemPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<InfoVideoProvider>();
+    final videoProvider = context.watch<InfoVideoProvider>();
+    final corProvider = context.watch<CorProvider>();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:
+          corProvider.corSelecionadaBackground?.cor ?? Colors.white,
       appBar: AppBar(
+        backgroundColor: corProvider.corSelecionadaTarefa?.cor ?? Colors.white,
         title:
-            provider.mostrandoBusca
+            videoProvider.mostrandoBusca
                 ? TextField(
                   autofocus: true,
                   decoration: InputDecoration(
                     hintText: 'Buscar...',
+                    hintStyle: TextStyle(color: Colors.blueGrey),
                     border: InputBorder.none,
                   ),
-                  onChanged: provider.buscar,
+                  onChanged: videoProvider.buscar,
                 )
-                : Text('Favoritos YT'),
+                : Text(
+                  'Favoritos YT',
+                  style: TextStyle(color: Colors.blueGrey),
+                ),
         actions: [
           IconButton(
-            icon: Icon(provider.mostrandoBusca ? Icons.close : Icons.search),
+            icon: Icon(
+              videoProvider.mostrandoBusca ? Icons.close : Icons.search,
+            ),
             onPressed: () {
-              if (provider.mostrandoBusca) {
-                provider.cancelarBusca();
+              if (videoProvider.mostrandoBusca) {
+                videoProvider.cancelarBusca();
               } else {
-                provider.iniciarBusca();
+                videoProvider.iniciarBusca();
               }
             },
           ),

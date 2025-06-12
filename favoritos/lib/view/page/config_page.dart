@@ -11,38 +11,86 @@ class ConfigPage extends StatelessWidget {
     final corProvider = context.watch<CorProvider>();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:
+          corProvider.corSelecionadaBackground?.cor ?? Colors.white,
       appBar: AppBar(
-        title: Text('Configurações'),
+        backgroundColor: corProvider.corSelecionadaTarefa?.cor ?? Colors.black,
+        title: Text('Configurações', style: TextStyle(color: Colors.blueGrey)),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await corProvider.salvarCores();
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text('Cores salvas!')));
+            },
+            icon: Icon(Icons.add_task),
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
         child: Column(
+          spacing: 12,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Tema',
               style: TextStyle(
-                color: Colors.black,
+                color: Colors.blueGrey,
                 fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontSize: 18,
               ),
             ),
-            SizedBox(height: 12),
-            Text('Cor da barra de tarefas'),
-            DropdownButton<Cores>(
-              hint: Text('Selecione a cor'),
-              value: corProvider.corSelecionada,
-              onChanged: corProvider.selecionar,
-              items: corProvider.cores.map((Cores cor) {
-                return DropdownMenuItem<Cores>(
-                  value: cor,
-                  child: Text(
-                    cor.nome,
-                    style: TextStyle(color: cor.cor),
-                  ),
-                );
-              }).toList(),
+            Text(
+              'Cor da barra de tarefas',
+              style: TextStyle(color: Colors.blueGrey, fontSize: 16),
+            ),
+            DropdownButtonFormField<Cores>(
+              dropdownColor: Colors.grey.shade200,
+              icon: Icon(Icons.arrow_drop_down, color: Colors.blueGrey),
+              decoration: InputDecoration(
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blueGrey),
+                ),
+              ),
+              value: corProvider.corSelecionadaTarefa,
+              onChanged: corProvider.selecionarCorTarefa,
+              items:
+                  corProvider.cores.map((Cores cor) {
+                    return DropdownMenuItem<Cores>(
+                      value: cor,
+                      child: Text(
+                        cor.nome,
+                        style: TextStyle(color: Colors.blueGrey),
+                      ),
+                    );
+                  }).toList(),
+            ),
+            Text(
+              'Cor de fundo da aplicação',
+              style: TextStyle(color: Colors.blueGrey, fontSize: 16),
+            ),
+            DropdownButtonFormField(
+              dropdownColor: Colors.grey.shade200,
+              icon: Icon(Icons.arrow_drop_down, color: Colors.blueGrey),
+              value: corProvider.corSelecionadaBackground,
+              decoration: InputDecoration(
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blueGrey),
+                ),
+              ),
+              onChanged: corProvider.selecionarCorBackground,
+              items:
+                  corProvider.cores.map((Cores cor) {
+                    return DropdownMenuItem<Cores>(
+                      value: cor,
+                      child: Text(
+                        cor.nome,
+                        style: TextStyle(color: Colors.blueGrey),
+                      ),
+                    );
+                  }).toList(),
             ),
           ],
         ),

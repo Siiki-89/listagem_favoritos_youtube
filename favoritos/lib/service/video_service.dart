@@ -5,7 +5,7 @@ import 'package:listagem_favoritos_youtube/model/video_model.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 
 Future<Video?> buscarVideo(String id, String categoria) async {
-   final ipv4 = await NetworkInfo().getWifiIP();
+  final ipv4 = '192.168.1.10';
   final urlListar = 'http://$ipv4:8888/video/$id';
   Uri uri = Uri.parse(urlListar);
   try {

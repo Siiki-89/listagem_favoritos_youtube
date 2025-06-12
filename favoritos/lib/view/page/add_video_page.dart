@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:listagem_favoritos_youtube/provider/cor_provider.dart';
 import 'package:listagem_favoritos_youtube/provider/info_video_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -7,21 +8,34 @@ class AddVideoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final corProvider = context.watch<CorProvider>();
+    final videoProvider = context.read<InfoVideoProvider>();
     TextEditingController urlController = TextEditingController();
     TextEditingController categoriaController = TextEditingController();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:
+          corProvider.corSelecionadaBackground?.cor ?? Colors.white,
 
       appBar: AppBar(
-        title: Text('Cadastro'),
+        title: Text('Cadastro', style: TextStyle(color: Colors.blueGrey)),
+        backgroundColor: corProvider.corSelecionadaTarefa?.cor ?? Colors.white,
         actions: [
           IconButton(
             onPressed: () async {
-              await context.read<InfoVideoProvider>().salvarVideo(
-                urlController.text,
-                categoriaController.text,
-              );
+              final url = urlController.text;
+              final categoria = categoriaController.text;
+              try {
+                await videoProvider.salvarVideo(url, categoria);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Vídeo salvo com sucesso!')),
+                );
+                Navigator.pop(context);
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Erro ao salvar vídeo!')),
+                );
+              }
             },
             icon: Icon(Icons.add_task),
           ),
@@ -34,14 +48,20 @@ class AddVideoPage extends StatelessWidget {
           children: [
             Text(
               'URL do video',
-              style: TextStyle(color: Colors.black, fontSize: 20),
+              style: TextStyle(color: Colors.blueGrey, fontSize: 20),
             ),
-            TextFormField(controller: urlController),
+            TextFormField(
+              controller: urlController,
+              style: TextStyle(color: Colors.blueGrey),
+            ),
             Text(
               'Categorias (#)',
-              style: TextStyle(color: Colors.black, fontSize: 20),
+              style: TextStyle(color: Colors.blueGrey, fontSize: 20),
             ),
-            TextFormField(controller: categoriaController),
+            TextFormField(
+              controller: categoriaController,
+              style: TextStyle(color: Colors.blueGrey),
+            ),
           ],
         ),
       ),
